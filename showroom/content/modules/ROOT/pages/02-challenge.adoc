@@ -1,11 +1,5 @@
-= 2. Issue a workload-bound challenge
+= 2. Roll policy and reference values (10 minutes)
 
-Declare the expected namespace, service account, immutable image digest, and
-requested protected resource. Issue a unique nonce with a short expiration.
+Move two nodes to `fleet-policy-v2` while leaving one on `fleet-policy-v1`. The fleet must return `REFUSE_PROMOTION` and name the skewed node. Repeat for a reference-values mismatch.
 
-The challenge prevents an old attestation result from being replayed for a new
-decision. Confirm that the operation contract binds the nonce to the exact
-workload identity and consumes it only once.
-
-Run the replay fixture after the allowed rehearsal. The second request must be
-`REFUSE` with `REPLAYED_CHALLENGE`.
+Restore a coherent pair. Explain why policy and reference values are reviewed and rolled together, and why partial success cannot become fleet authority.

@@ -1,14 +1,9 @@
-# Sovereign AI 401 — Operate Confidential AI with Intel TDX
+# Sovereign AI 501 — Qualify a Confidential AI Fleet
 
-This repository is the factory workspace for the 401-level Red Hat + Intel
-Sovereign AI catalog item. It teaches operators to verify confidential-runtime
-identity, appraise Intel TDX evidence, bind secrets and inference authorization
-to approved measurements, refuse stale or mismatched evidence, and preserve a
-reviewable trust chain.
+This private factory candidate extends the proven Sovereign AI 401 foundation from one confidential workload trust chain to a multi-node qualification envelope. It exercises policy/version rollout, attestation freshness and revocation, dependency failure containment, correlated evidence, bounded concurrency, fail-closed decisions, and a human-only promotion boundary.
 
-The current state is factory implementation with a passing deterministic
-REHEARSAL journey. It is not orderable, certified, deployable, or promoted.
-The factory may build an immutable
-REHEARSAL artifact, but LIVE confidential-inference claims require a working
-OpenShift Sandboxed Containers confidential workload plus a current verified
-TDX quote. Host capability alone is not sufficient.
+The presentation is a seven-scene, 5–7 minute Triforce-style story. The Showroom lab is a separate 75–90 minute build-and-qualify experience. Both use the same typed qualification contract.
+
+All included runtime results are **REHEARSAL**. The repository makes no LIVE confidential AI claim because it does not directly observe Intel Xeon TDX confidential guests, current quotes, a Trustee verifier/KBS, protected-resource release, or model execution. Factory completion does not make the item orderable, certified, promotion-eligible, or published.
+
+Run `npm ci`, `npm run check`, and `npm run test:visual`. The immutable release workflow builds Linux/AMD64 non-root images, gates on zero High/Critical vulnerabilities, emits SPDX SBOMs, signs with GitHub OIDC, attaches SLSA provenance, and proves exact-digest pulls.

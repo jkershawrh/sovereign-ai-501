@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "demo-story.redhat-intel.com/sovereign-ai-fleet-policy/v1",
+  "policyBundle": "fleet-policy-v2",
+  "referenceValues": "rv-2026-09-28",
+  "minimumFleetNodes": 2,
+  "maxQuoteAgeSeconds": 120,
+  "requiredSourceStateForCertification": "LIVE",
+  "failClosedOn": ["missing-evidence", "stale-quote", "revocation", "policy-skew", "reference-value-skew", "verifier-unavailable", "kbs-unavailable", "capacity-exceeded"],
+  "authority": {"humanPromotionRequired": true, "factoryMayCertify": false, "factoryMayPromote": false, "factoryMayPublish": false, "maxWorkshopSeats": 0}
+}

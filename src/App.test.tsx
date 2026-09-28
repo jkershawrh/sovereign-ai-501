@@ -15,7 +15,7 @@ describe('presentation controls', () => {
   it('supports deep links', () => {
     window.history.replaceState(null, '', '/?act=1&scene=0')
     render(<App />)
-    expect(screen.getByText('Eight states, one fail-closed chain')).toBeInTheDocument()
+    expect(screen.getByText('Five questions earn one candidate receipt')).toBeInTheDocument()
   })
 
   it('restarts from the brand control', () => {
@@ -37,6 +37,6 @@ describe('presentation controls', () => {
     window.history.replaceState(null, '', '/?act=0&scene=0')
     render(<App />)
     fireEvent.click(screen.getByRole('button', { name: 'Toggle presenter prompt' }))
-    expect(screen.getByText(/this session is REHEARSAL/)).toBeInTheDocument()
+    expect(screen.getByText(/State REHEARSAL/)).toBeInTheDocument()
   })
 })

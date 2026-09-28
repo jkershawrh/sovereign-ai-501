@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://demo-story.redhat-intel.com/sovereign-ai-501/fleet-qualification.schema.json",
+  "title": "Sovereign AI fleet qualification input",
+  "type": "object",
+  "required": ["scenario", "sourceState", "fleet", "capacity", "policy"],
+  "properties": {
+    "scenario": {"type": "string"},
+    "sourceState": {"enum": ["LIVE", "REHEARSAL", "OFFLINE"]},
+    "fleet": {"type": "array", "minItems": 2, "items": {"type": "object", "required": ["id", "quoteKind", "quoteFresh", "revoked", "policyBundle", "referenceValues", "verifierReachable", "kbsReachable"]}},
+    "capacity": {"type": "object", "required": ["requested", "admitted", "refused", "limit"]},
+    "policy": {"type": "object", "required": ["bundle", "referenceValues", "maxQuoteAgeSeconds"]}
+  },
+  "additionalProperties": false
+}

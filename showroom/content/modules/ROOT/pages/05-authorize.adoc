@@ -1,11 +1,5 @@
-= 5. Authorize one resource
+= 5. Contain dependency failure (10 minutes)
 
-Apply deterministic resource policy to the appraised identity. The policy binds
-one approved workload identity to one named resource and policy version.
+Partition the verifier for one node, then the KBS boundary. Each affected path must fail closed. No cached appraisal, fallback secret, or successful peer may authorize the failed path.
 
-The allowed rehearsal emits only a hash receipt. It never returns key material.
-Change the requested resource and verify `RESOURCE_POLICY_DENIED`. Disable the
-key broker and verify `ABSTAIN` rather than a fallback secret.
-
-Capture the appraisal and authorization receipts as separate evidence records.
-
+Trace which runtime boundary produced the refusal and confirm that all other conditions remain visible in the accumulated evidence case.

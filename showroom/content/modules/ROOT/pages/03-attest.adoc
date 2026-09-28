@@ -1,13 +1,5 @@
-= 3. Collect attestation evidence
+= 3. Enforce attestation freshness (10 minutes)
 
-Trace where a real confidential workload would request an Intel TDX quote and
-where the quote service sits outside the workload boundary. Inspect the
-rehearsal fixture's provenance before using it.
+Advance one node beyond the declared quote-age window. The next decision must refuse the fleet and preserve the exact age and node identity in the receipt.
 
-The fixture is not a cryptographic quote and is always labeled **REHEARSAL**.
-Change its source state to `LIVE` without changing its evidence kind. The
-service must refuse the false-live claim before appraisal or resource policy.
-
-Record the live gate: confidential guest running, challenge-bound quote,
-signature verified, and workload identity observed.
-
+Change a synthetic fixture to claim `LIVE` without supplying a hardware quote. Confirm `FALSE_LIVE_CLAIM`. State the missing direct observations required to lift this blocker.

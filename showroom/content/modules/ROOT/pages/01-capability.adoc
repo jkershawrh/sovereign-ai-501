@@ -1,15 +1,5 @@
-= 1. Observe capability
+= 1. Establish the fleet baseline (10 minutes)
 
-Inspect the cluster, node, and runtime configuration. Record whether Intel TDX,
-the DCAP quote service, OpenShift Sandboxed Containers, and `kata-cc` are
-present.
+Inspect the contract and create three node-scoped REHEARSAL evidence records. Confirm that every node names the same workload identity, policy bundle, reference-values version, freshness window, and correlation identifier.
 
-Capability is not workload proof. A CPU flag or `runtimeClassName` cannot show
-that this pod launched as a confidential guest, produced a valid quote, or
-matches approved measurements. Record unavailable observations as **UNKNOWN**
-and keep the exercise in **REHEARSAL**.
-
-Compare the source lab's known blocker: the TDX VM can launch, but the kata
-agent does not complete its vsock connection. Explain why host capability is
-still useful evidence—and why it cannot authorize a protected resource.
-
+Run the baseline. `QUALIFIED_REHEARSAL` means only that the deterministic control path is coherent. Record that live guests, quotes, resource release, and model execution all remain zero.

@@ -1,15 +1,5 @@
-= 6. Keep inference authorization separate
+= 6. Exercise admission limits (10 minutes)
 
-A valid appraisal and resource-policy match do not authorize a caller, prompt,
-model, or inference request. Inspect the response and verify:
+Request 18 concurrent rehearsal operations against a declared limit of 12. Confirm that 12 are admitted and 6 refused, with no silent overcommit.
 
-* `keyMaterialReleased` is `false`;
-* inference authorization is `false`;
-* `modelInvoked` is `false`;
-* no latency or performance claim is present;
-* LLM authority is `NONE`.
-
-Describe the additional caller, model, residency, and usage policies a real
-inference path would require. Do not add them to the receipt unless the
-destination can observe and verify them.
-
+These counts test deterministic admission logic only. They are not measured production capacity, throughput, latency, model concurrency, or a Launchpad seat claim.

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "demo-story.redhat-intel.com/sovereign-ai-fleet-failure-matrix/v1",
+  "cases": [
+    {"condition": "baseline-rehearsal", "decision": "QUALIFIED_REHEARSAL", "promotion": false},
+    {"condition": "stale-quote", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "revoked-node", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "policy-skew", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "verifier-partition", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "kbs-partition", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "capacity-exceeded", "decision": "REFUSE_PROMOTION", "promotion": false},
+    {"condition": "false-live-claim", "decision": "REFUSE_PROMOTION", "promotion": false}
+  ]
+}

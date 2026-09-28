@@ -8,6 +8,7 @@ import { TechnicalTopology } from './TechnicalTopology'
 export function LiveJourney({ scene }: { scene: LiveJourneyScene }) {
   const [stepIndex, setStepIndex] = useState(-1)
   const [state, setState] = useState<ProofState>({ status: 'idle' })
+  const [history, setHistory] = useState<Array<{id: string; title: string; source: string; outcome: string}>>([])
   const [showTopology, setShowTopology] = useState(false)
   const controller = useRef<AbortController | undefined>(undefined)
   const step = stepIndex >= 0 ? scene.steps[stepIndex] : undefined
@@ -26,7 +27,11 @@ export function LiveJourney({ scene }: { scene: LiveJourneyScene }) {
       setState({ status: 'error', error: `Adapter not registered: ${next.adapterId}` })
       return
     }
-    setState(await runProof(adapter, controller.current.signal))
+    const result = await runProof(adapter, controller.current.signal)
+    setState(result)
+    if (result.status === 'ready' && result.data) {
+      setHistory((current) => [...current.filter((item) => item.id !== next.id), {id: next.id, title: next.title, source: result.source ?? 'rehearsal', outcome: String(result.data?.outcome ?? result.data?.decision ?? 'recorded')}])
+    }
   }
 
   return <SceneFrame scene={scene}><div className="live-workspace" data-testid="live-workspace">
@@ -52,6 +57,7 @@ export function LiveJourney({ scene }: { scene: LiveJourneyScene }) {
     {state.status === 'ready' && state.data && step && <div className="journey-results">
       {step.resultFields.map((field) => <div className="journey-result" key={field.key}><span>{field.label}</span><strong>{String(state.data?.[field.key] ?? '—')}{field.suffix}</strong></div>)}
     </div>}
+    {history.length > 0 && <div className="evidence-trail" aria-label="Accumulated qualification evidence">{history.map((item) => <div key={item.id}><span>{item.source}</span><strong>{item.title}</strong><small>{item.outcome}</small></div>)}</div>}
     {state.error && <p className="fallback-note">{state.error}{state.status === 'ready' ? ' Showing clearly labeled fallback evidence.' : ''}</p>}
       <div className="journey-controls">
       {scene.technicalTopology && <button className="button button-secondary" onClick={() => setShowTopology((visible) => !visible)}>{showTopology ? 'Hide' : 'Inspect'} technical topology</button>}
@@ -59,7 +65,7 @@ export function LiveJourney({ scene }: { scene: LiveJourneyScene }) {
       {stepIndex >= 0 && !complete && state.status !== 'loading' && <button className="button button-primary" onClick={() => runStep(stepIndex + 1)}>Next live act →</button>}
       {state.status === 'loading' && <button className="button button-primary" disabled>Running…</button>}
       {state.status === 'error' && <button className="button button-secondary" onClick={() => runStep(stepIndex)}>Retry</button>}
-      {complete && <button className="button button-secondary" onClick={() => { setStepIndex(-1); setState({ status: 'idle' }); setShowTopology(false) }}>Replay</button>}
+      {complete && <button className="button button-secondary" onClick={() => { setStepIndex(-1); setState({ status: 'idle' }); setHistory([]); setShowTopology(false) }}>Replay</button>}
       {complete && scene.workspace && <a className="button button-primary" href={scene.workspace.href}>{scene.workspace.label} →</a>}
       </div>
     </div>

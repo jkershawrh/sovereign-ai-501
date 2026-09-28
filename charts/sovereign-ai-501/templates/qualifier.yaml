@@ -7,7 +7,7 @@ spec:
     matchLabels: {app.kubernetes.io/name: {{ .Release.Name }}-qualifier}
   template:
     metadata:
-      labels: {app.kubernetes.io/name: {{ .Release.Name }}-qualifier, app.kubernetes.io/part-of: sovereign-ai-401}
+      labels: {app.kubernetes.io/name: {{ .Release.Name }}-qualifier, app.kubernetes.io/part-of: sovereign-ai-501}
     spec:
       automountServiceAccountToken: false
       securityContext: {runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}

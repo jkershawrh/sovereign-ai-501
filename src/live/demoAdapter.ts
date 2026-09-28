@@ -1,22 +1,13 @@
-import { createJsonAdapter, registerAdapter } from './adapters'
+import {createJsonAdapter, registerAdapter} from './adapters'
 
-const collectedAt = '2026-09-28T22:30:00.000Z'
+const collectedAt = '2026-09-28T23:00:00.000Z'
 const steps = [
-  ['tdx-capability', 'CAPABILITY', 'REHEARSAL', 'TDX-capable host and kata-cc configuration observed; workload trust not yet proven'],
-  ['tdx-challenge', 'CHALLENGE', 'REHEARSAL', 'Fresh single-use challenge bound to the declared workload identity'],
-  ['tdx-attest', 'ATTEST', 'REHEARSAL', 'Synthetic quote fixture collected; no live confidential guest or hardware quote claimed'],
-  ['tdx-appraise', 'APPRAISE', 'REHEARSAL', 'Reference measurement, freshness, TCB state, and signature policy evaluated'],
-  ['tdx-authorize', 'AUTHORIZE', 'REHEARSAL', 'Deterministic resource policy emits a synthetic authorization receipt'],
-  ['tdx-infer', 'INFER', 'REHEARSAL', 'Inference remains disabled because rehearsal authorization is not production permission'],
-  ['tdx-revoke', 'REVOKE', 'REHEARSAL', 'Measurement revoked; the next matching request is refused'],
-  ['tdx-verify', 'VERIFY', 'REHEARSAL', 'Challenge, appraisal, policy, authorization, and revocation receipts verify as one chain'],
+  ['fleet-baseline', 'QUALIFIED_REHEARSAL', 'REHEARSAL', 'Three correlated fixtures agree; zero live quotes observed'],
+  ['fleet-rollout', 'REFUSE_PROMOTION', 'REHEARSAL', 'tdx-b policy bundle is one version behind'],
+  ['fleet-revoke', 'REFUSE_PROMOTION', 'REHEARSAL', 'tdx-c revocation changes the next decision'],
+  ['fleet-partition', 'REFUSE_PROMOTION', 'REHEARSAL', 'Verifier unavailable; affected path fails closed'],
+  ['fleet-capacity', 'REFUSE_PROMOTION', 'REHEARSAL', '12 admitted · 6 refused · not measured live capacity'],
+  ['fleet-correlate', 'HUMAN_REVIEW_REQUIRED', 'REHEARSAL', 'One receipt binds every node, condition, policy, and limit'],
 ] as const
 
-for (const [id, decision, sourceState, outcome] of steps) {
-  registerAdapter(createJsonAdapter({
-    id,
-    url: `/api/v1/proof/${id}`,
-    timeoutMs: 2_500,
-    rehearsal: {data: {decision, sourceState, outcome}, collectedAt},
-  }))
-}
+for (const [id, decision, sourceState, outcome] of steps) registerAdapter(createJsonAdapter({id, url: `/api/v1/proof/${id}`, timeoutMs: 2_500, rehearsal: {data: {decision, sourceState, outcome}, collectedAt}}))

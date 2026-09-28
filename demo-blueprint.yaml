@@ -1,42 +1,87 @@
-schema_version: demo-story.redhat-intel.com/demo-blueprint/v1
-identity:
-  catalog_item_id: sovereign-ai-401
-  title: "Sovereign AI 401 — Operate Confidential AI with Intel TDX"
-  track: sovereign_ai
-  learning_level: "401"
-  status: factory_green_rehearsal
-sources:
-  prerequisite:
-    repository: https://github.com/jkershawrh/sovereign-ai-301
-    revision: "d46625e8e1eb89e35c0a93385a47564d825a8115"
-  supplemental:
-    repository: https://github.com/jkershawrh/sovereign-ai-lab
-    revision: "05dea04c2faa95b2df426a228b8979ed7f07a098"
-story:
-  business_outcome: "Release protected AI resources only to an independently verified confidential workload."
-  tension: "The platform reports TDX capability, but capability is not proof that this workload is trustworthy now."
-  proof:
-    - challenge freshness and workload identity are bound to the quote
-    - measurements and TCB status are independently appraised
-    - secret and inference authorization is deterministic and fail-closed
-    - stale, simulated, mismatched, or revoked evidence is refused
-    - authorization and inference receipts form a verifiable chain
-  payoff: "The operator can prove why a workload received—or did not receive—access without trusting the model to govern itself."
+version: 1
+status: reviewed
+source:
+  name: sovereign-ai-401
+  kind: repository
+  location: /Users/jkershaw/Documents/sovereign-ai-401
+  revision: f893c1360ef2b059fae86ca3156103977aecd86e
+  discovered_at: "2026-09-28T23:00:00Z"
+  inspected_artifacts: [README.md, contracts, workload, charts, tests, showroom, handoff, release-workflow]
+  discrepancies:
+    - "401 proves a deterministic single-workload REHEARSAL chain; it contains no observed multi-node TDX fleet."
+    - "Published 401 candidates do not certify, order, or promote a 501 fleet."
+intent:
+  primary_user: "Platform, security, AI, and risk teams jointly qualifying a confidential AI fleet."
+  workload: "A multi-node confidential AI service with versioned attestation and resource policy."
+  recognized_problem: "A trusted node and a passing request do not prove that a fleet remains uniformly trustworthy under rollout, revocation, load, or dependency failure."
+  audience_decision: "Is the fleet evidence complete enough for a named human to request independent certification?"
+  desired_outcome: "Produce a correlated, fail-closed qualification receipt without granting certification or promotion authority."
 architecture:
-  components: [operator, openshift, sandboxed_containers, kata_cc_runtime, intel_tdx, dcap_quote_service, independent_verifier, reference_values, deterministic_policy, key_broker, inference_service, evidence_ledger, human_authority]
-  states: [CAPABILITY, CHALLENGE, ATTEST, APPRAISE, AUTHORIZE, INFER, REVOKE, VERIFY]
-  decisions: [ALLOW_REVIEW, REFUSE, ABSTAIN]
-authority:
-  automated_secret_release_in_rehearsal: false
-  human_approval_required: true
-  llm_may_appraise_or_authorize: false
-  factory_may_certify: false
+  actors:
+    - {id: operator, name: Qualification operator, kind: human, responsibility: Runs bounded qualification scenarios, status: verified, source: "showroom + workload API"}
+    - {id: reviewer, name: Promotion reviewer, kind: human, responsibility: Owns the final promotion decision, status: verified, source: "authority contract"}
+  runtime_objects:
+    - {id: fleet, name: Confidential workload fleet, kind: deployments, responsibility: Presents node-scoped evidence, status: verified, source: "fleet qualification contract"}
+    - {id: verifier, name: Trustee verifier boundary, kind: service, responsibility: Appraises fresh quotes, status: assumed, source: "LIVE dependency; absent in factory"}
+    - {id: kbs, name: KBS resource boundary, kind: service, responsibility: Applies protected-resource policy, status: assumed, source: "LIVE dependency; absent in factory"}
+    - {id: ledger, name: Correlated evidence receipt, kind: evidence, responsibility: Binds node, policy, failure, capacity, and authority results, status: verified, source: "workload/fleet-qualification.mjs"}
+  boundaries:
+    - {id: trust, name: Fleet trust boundary, kind: security, responsibility: Separates capability from observed evidence, status: verified, source: "qualification contract"}
+    - {id: authority, name: Human promotion boundary, kind: authority, responsibility: Prevents automated certification or promotion, status: verified, source: "authority contract"}
+  external_dependencies:
+    - {id: tdx, name: Intel Xeon TDX guests, kind: hardware-runtime, responsibility: Produce current hardware-rooted evidence, status: unknown, source: "not observed"}
+    - {id: model, name: Protected model execution, kind: model-service, responsibility: Executes only after independent authorization, status: unknown, source: "not observed"}
+  flows:
+    - id: qualify-fleet
+      name: Fleet qualification path
+      kind: evidence
+      trigger: "Operator starts a named condition."
+      outcome: "One correlated receipt and a human review boundary."
+      edges:
+        - {from: operator, to: fleet, purpose: Select policy/version and condition, protocol: HTTPS/JSON, evidence_ids: [condition]}
+        - {from: fleet, to: verifier, purpose: Appraise node evidence and freshness, protocol: attestation API, evidence_ids: [attestation]}
+        - {from: verifier, to: kbs, purpose: Apply versioned resource policy, protocol: policy API, evidence_ids: [policy]}
+        - {from: kbs, to: ledger, purpose: Append bounded result, protocol: receipt/v1, evidence_ids: [receipt]}
+        - {from: ledger, to: reviewer, purpose: Request human review without authority, protocol: signed evidence, evidence_ids: [authority]}
+operational_pattern:
+  name: "Baseline → Roll out → Revoke → Partition → Saturate → Correlate → Review"
+  rationale: "501 is earned by showing that trust survives controlled change across a fleet and fails closed when it does not."
+  steps:
+    - {id: baseline, label: Establish baseline, question: "Are all node receipts coherent?", flow_ids: [qualify-fleet], evidence_ids: [attestation, policy]}
+    - {id: rollout, label: Roll policy, question: "Does version skew block the fleet?", flow_ids: [qualify-fleet], evidence_ids: [policy], decision_id: promotion}
+    - {id: revoke, label: Revoke a node, question: "Does revocation reach the next decision?", flow_ids: [qualify-fleet], evidence_ids: [attestation], decision_id: promotion}
+    - {id: contain, label: Partition a dependency, question: "Does the affected path fail closed?", flow_ids: [qualify-fleet], evidence_ids: [condition], decision_id: promotion}
+    - {id: capacity, label: Saturate admission, question: "Is the declared concurrency limit enforced?", flow_ids: [qualify-fleet], evidence_ids: [capacity], decision_id: promotion}
+    - {id: correlate, label: Correlate evidence, question: "Can every decision be traced by one identifier?", flow_ids: [qualify-fleet], evidence_ids: [receipt]}
+    - {id: review, label: Request human review, question: "Who may decide what happens next?", flow_ids: [qualify-fleet], evidence_ids: [authority], decision_id: promotion}
+  changed_condition: "policy version, quote freshness, revocation, dependency reachability, or requested concurrency"
+  close: "Stop at an immutable candidate with all Launchpad authority false."
 evidence:
-  source_states: [LIVE, REHEARSAL, OFFLINE]
-  live_claim_requires: [confidential_guest_running, fresh_challenge_bound_quote, verified_quote_signature, approved_measurements, approved_tcb_status, workload_identity_match, policy_receipt, protected_resource_receipt]
-  host_capability_is_workload_attestation: false
-runtime:
-  architecture: linux/amd64
-  deployment_scope: participant_namespace
-  exact_digest_images_required: true
-  release_gate: zero_high_zero_critical
+  - {id: condition, name: Named rehearsal condition, source: checked-in fixture, collection: deterministic API, supports: failure-containment behavior, status: verified}
+  - {id: attestation, name: Per-node freshness and revocation result, source: rehearsal fixture, collection: qualifier, supports: control-flow proof only, status: verified}
+  - {id: policy, name: Policy and reference-value consistency, source: rehearsal fixture, collection: qualifier, supports: rollout behavior, status: verified}
+  - {id: capacity, name: Admission limit result, source: rehearsal fixture, collection: qualifier, supports: limit enforcement but not production capacity, status: verified}
+  - {id: receipt, name: Correlated evidence receipt, source: current request, collection: SHA-256 receipt, supports: traceability, status: verified}
+  - {id: authority, name: Human authority envelope, source: contract, collection: qualifier response, supports: no automated certification or promotion, status: verified}
+decisions:
+  - {id: promotion, owner: named human reviewer, policy: "All evidence must be LIVE and independently certified before promotion can be considered.", fail_closed_behavior: "REFUSE_PROMOTION; retain max seats 0.", status: verified}
+ai_assessment:
+  needed: false
+  kind: rules
+  rationale: "Qualification is deterministic policy evaluation; no LLM is needed or permitted to authorize."
+  tasks: []
+  inputs: [node evidence, policy versions, dependency state, requested concurrency]
+  outputs: [qualification receipt, refusal reasons]
+  evidence_access: [current request only]
+  action_authority: none
+  validation: [contract tests, failure matrix, browser journey]
+  fallback: "REHEARSAL fixtures remain visibly labeled; missing dependencies fail closed."
+  final_decision_owner: "Named human promotion reviewer"
+story_mapping:
+  audience_question: "Can this fleet earn independent certification without turning rehearsal into authority?"
+  stakes: ["A passing node can hide fleet-wide trust gaps.", "Scaling an assumption scales risk."]
+  architecture_flow_ids: [qualify-fleet]
+  live_proof_flow_ids: [qualify-fleet]
+  comparison: "Change rollout, freshness, revocation, dependency, and load conditions through the same path."
+  payoff: "One correlated candidate receipt; zero certification or promotion authority."
+  next_journey: "Continue into the separate 75–90 minute Showroom lab."

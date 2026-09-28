@@ -1,13 +1,5 @@
-= 4. Appraise independently
+= 4. Revoke a node (10 minutes)
 
-The verifier—not the workload and not an LLM—checks authenticity, challenge
-binding, freshness, endorsements, reference measurements, and TCB status.
+Mark one node measurement revoked, then submit a new qualification request. The next decision—not a future cache refresh—must return `REFUSE_PROMOTION` and identify the revoked node.
 
-Run the measurement-mismatch, stale-quote, non-TDX, TCB-out-of-date, and
-verifier-unavailable scenarios. A mismatch or invalid state is `REFUSE`.
-Unavailable independent evidence is `ABSTAIN`. Neither result may release key
-material or invoke a model.
-
-Explain why appraisal is a claim about evidence, not permission to use a
-resource.
-
+Record the policy version, reference-values version, condition, correlation identifier, and human actor who would own a real revocation change.

@@ -1,11 +1,7 @@
-= Operate confidential AI with Intel TDX
+= Qualify a confidential AI fleet
 
-This 75–90 minute lab uses **REHEARSAL** fixtures until the destination proves a running confidential guest and a fresh Intel TDX quote. It does not release a secret, invoke a model, or claim latency or performance.
+This separate 75–90 minute Showroom lab extends the 401 trust lifecycle to a fleet-wide qualification envelope. All supplied results are **REHEARSAL**. The lab does not observe a confidential guest, current Intel TDX quote, Trustee verifier/KBS, protected-resource release, or model execution.
 
-You will operate the complete trust lifecycle:
+You will build and test: BASELINE → ROLLOUT → FRESHNESS → REVOCATION → PARTITION → CAPACITY → CORRELATION → HUMAN REVIEW.
 
-CAPABILITY → CHALLENGE → ATTEST → APPRAISE → AUTHORIZE → INFER → REVOKE → VERIFY
-
-Each exercise separates observed evidence from policy and authority. The
-deterministic service may issue a synthetic receipt, but only a named human can
-approve deployment, reference-value changes, certification, or promotion.
+The exit artifact is a reviewable candidate receipt. It grants no catalog, provisioning, certification, ordering, promotion, or publication authority.
