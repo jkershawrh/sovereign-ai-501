@@ -3,8 +3,10 @@ kind: CatalogOnboardingProposal
 metadata: {catalog_item_id: sovereign-ai-501, status: draft}
 spec:
   source_repository: https://github.com/jkershawrh/sovereign-ai-501
-  source_revision: PENDING_SOURCE_COMMIT
+  source_revision: bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff
   deploy_path: charts/sovereign-ai-501
   source_state: REHEARSAL
+  workload_image: ghcr.io/jkershawrh/sovereign-ai-501-qualifier@sha256:cc3b3cfc19697b57d03347491523b6d72524fdb7890c591344ca714bbc4bca57
+  presentation_image: ghcr.io/jkershawrh/sovereign-ai-501-presentation@sha256:cd739547778feaaa5c0d86af26032a1b5962e95fe5447ec0b477730020daae64
   orderable: false
   max_workshop_seats: 0

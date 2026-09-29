@@ -2,10 +2,10 @@ sourceState: REHEARSAL
 images:
   presentation:
     repository: ghcr.io/jkershawrh/sovereign-ai-501-presentation
-    digest: sha256:3406d439643ee0022f0f8b7b33cd32b09ea081fe068879b1e6ed88c8e282bc71
+    digest: sha256:cd739547778feaaa5c0d86af26032a1b5962e95fe5447ec0b477730020daae64
   qualifier:
     repository: ghcr.io/jkershawrh/sovereign-ai-501-qualifier
-    digest: sha256:6618e601513a468a807eda1762c124e567c322e89c04a11c067da80bd8ff6721
+    digest: sha256:cc3b3cfc19697b57d03347491523b6d72524fdb7890c591344ca714bbc4bca57
 imagePullPolicy: IfNotPresent
 presentation:
   replicas: 1

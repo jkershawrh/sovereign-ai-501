@@ -1,0 +1,13 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/presentation-verification/v1",
+  "source_revision": "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff",
+  "scene_count": 7,
+  "browser_tests": {"passed": 14, "failed": 0, "skipped": 1},
+  "desktop_stage_fit": {"1920x1080": "PASS_ZERO_SCROLL", "1440x900": "PASS_ZERO_SCROLL"},
+  "internal_reveals": "PASS_ALL_FIVE_ARCHITECTURE_AND_SIX_QUALIFICATION_STEPS",
+  "keyboard_and_close": "PASS",
+  "mobile": "PASS_USABLE; desktop zero-scroll assertion intentionally skipped",
+  "offline_assets": "PASS",
+  "observed_source_state": "REHEARSAL",
+  "live_tdx_claimed": false
+}

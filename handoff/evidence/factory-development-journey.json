@@ -1,0 +1,11 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/factory-development-journey/v1",
+  "source_revision": "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff",
+  "method": ["CDD", "TDD", "EDD"],
+  "test_gate": {"status": "PASS", "component_tests": 32, "contract_and_runtime_tests": 16, "browser_tests_passed": 14, "showroom_stages": 8, "npm_audit_vulnerabilities": 0},
+  "artifact_gate": {"status": "PASS_PUBLISHED_CANDIDATE", "architectures": ["linux/amd64"], "published_scan_high": 0, "published_scan_critical": 0, "oidc_signatures": 2, "spdx_sboms": 2, "slsa_attestations": 2},
+  "development_journey": {"status": "PASS_REHEARSAL_ONLY", "fleet_nodes": 3, "conditions": ["baseline", "stale_quote", "revoked_node", "policy_skew", "verifier_partition", "kbs_partition", "capacity_exceeded", "false_live_claim"], "exact_digest_health": "PASS", "capacity_condition": {"requested": 18, "admitted": 12, "refused": 6, "measured_live": false}, "live_tdx_observed": false, "confidential_guests_observed": 0, "current_quotes_verified": 0, "protected_resources_released": 0, "models_executed": 0},
+  "local_resource_observation": {"status": "LOCAL_ARM_HOST_EMULATING_LINUX_AMD64_SINGLE_RUN_ONLY", "presentation_memory_mb": 13.1, "qualifier_memory_mb": 54.16, "pods_or_containers": 2, "production_capacity_claim": false},
+  "integrated_cluster_gate": "NOT_RUN_IN_FACTORY",
+  "authority": "This receipt grants no catalog, provisioning, certification, ordering, promotion, or publication authority."
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/zero-residue/v1",
+  "scope": "local public exact-digest container journey",
+  "source_revision": "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff",
+  "removed": ["sovereign501-exact-presentation", "sovereign501-exact-qualifier", "sovereign501-measure-presentation", "sovereign501-measure-qualifier"],
+  "remaining_matching_containers": 0,
+  "openshift_reclaim": "NOT RUN; independent Launchpad cluster qualification gate"
+}

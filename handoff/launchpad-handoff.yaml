@@ -1,15 +1,123 @@
 schema_version: demo-story.redhat-intel.com/launchpad-handoff/v1
 factory_receipt:
-  identity: {catalog_item_id: sovereign-ai-501, display_name: "Sovereign AI 501 — Qualify a Confidential AI Fleet", proposed_track: sovereign_ai, proposed_learning_level: "501"}
-  authority: {orderable: false, certified: false, promotion_eligible: false, may_modify_launchpad_catalog: false, may_provision: false, may_publish: false}
-  presentation_source: {repository: "https://github.com/jkershawrh/sovereign-ai-501", revision: PENDING_SOURCE_COMMIT, tree_dirty: false}
+  identity:
+    catalog_item_id: sovereign-ai-501
+    display_name: "Sovereign AI 501 — Qualify a Confidential AI Fleet"
+    proposed_track: sovereign_ai
+    proposed_learning_level: "501"
+  authority:
+    orderable: false
+    certified: false
+    promotion_eligible: false
+    may_modify_launchpad_catalog: false
+    may_provision: false
+    may_publish: false
+  presentation_source:
+    repository: https://github.com/jkershawrh/sovereign-ai-501
+    revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff"
+    tree_dirty: false
   artifacts:
-    workload: {image: PENDING_RELEASE, architecture: linux/amd64, source_repository: "https://github.com/jkershawrh/sovereign-ai-501", source_revision: PENDING_SOURCE_COMMIT}
-    presentation: {image: PENDING_RELEASE, architecture: linux/amd64, source_repository: "https://github.com/jkershawrh/sovereign-ai-501", source_revision: PENDING_SOURCE_COMMIT}
+    workload:
+      image: ghcr.io/jkershawrh/sovereign-ai-501-qualifier@sha256:cc3b3cfc19697b57d03347491523b6d72524fdb7890c591344ca714bbc4bca57
+      architecture: linux/amd64
+      source_repository: https://github.com/jkershawrh/sovereign-ai-501
+      source_revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff"
+      release_receipt: {path: evidence/published-qualifier-release.json, sha256: "1c680d9d79e1e7c08d6e23f669279591644a64a8743a289ed0949203e7f769f2"}
+    presentation:
+      image: ghcr.io/jkershawrh/sovereign-ai-501-presentation@sha256:cd739547778feaaa5c0d86af26032a1b5962e95fe5447ec0b477730020daae64
+      architecture: linux/amd64
+      source_repository: https://github.com/jkershawrh/sovereign-ai-501
+      source_revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff"
+      release_receipt: {path: evidence/published-presentation-release.json, sha256: "1cac5c09557aaef7edcfeedd420942604592e6e82dfec75e84d46ac231729192"}
+    showroom_content:
+      repository: https://github.com/jkershawrh/sovereign-ai-501
+      revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff"
+      bundle_digest: "sha256:49a4fafc10ff0712412639e25d86f05e981c304846904b63af31fd20ceae9810"
+  factory_evidence:
+    development_journey: {path: evidence/factory-development-journey.json, sha256: "45b49a1b1526c1d54bf7a2c36001cd0ed438f43941cbd4b084e669f0cbf1d846"}
+    presentation_verification: {path: evidence/presentation-verification.json, sha256: "2b6d571b8d084eb0c07b97657a9ab87c399cf8f900ee51a798dd5304e1a68664"}
+    zero_residue: {path: evidence/factory-zero-residue.json, sha256: "9182955ced5cbf739f4e57ab4baedbaec644da89a521a8fc4320d808be35eb4b"}
+  contracts:
+    demo_blueprint: demo-blueprint.yaml
+    story_brief: story.brief.yaml
+    fleet_qualification: contracts/fleet-qualification.schema.json
+    fleet_policy: contracts/fleet-policy.v1.json
+    failure_matrix: contracts/fleet-failure-matrix.v1.json
   known_blockers:
-    - "No approved Intel Xeon TDX confidential guest or current quote is attached."
-    - "No live Trustee verifier, KBS policy, protected-resource release, or model execution is observed."
-    - "Launchpad intake, trusted rendering, certification, capacity graduation, reclaim, promotion, and publication have not run."
+    - No approved Intel Xeon TDX confidential fleet or current hardware-rooted quotes are attached.
+    - No live OpenShift Sandboxed Containers confidential guest placement is verified.
+    - No reviewed live Trustee verifier, KBS, reference values, or protected-resource release is attached.
+    - No model execution is observed; the factory journey is REHEARSAL and makes no latency, throughput, or production-capacity claim.
+    - The local resource observation used an Arm host emulating Linux AMD64 and is not a destination capacity result.
+    - Sovereign AI remains a proposed Launchpad taxonomy and lower-level prerequisites require independent approval.
+    - Destination admission, NetworkPolicy, Route, registry, one-seat, scale, reclaim, and zero-residue gates remain unverified.
+    - Launchpad source approval, trusted rendering, artifact review, live-seat certification, scale graduation, promotion, and publication remain required.
 proposed_launchpad_intake:
-  catalog: {catalog_item_id: sovereign-ai-501, status: draft}
-  certification_proposal: {stage: factory-source-pending-release, max_workshop_seats: 0}
+  api_version: launchpad.redhat.com/v1alpha1
+  catalog:
+    catalog_item_id: sovereign-ai-501
+    display_name: "Sovereign AI 501 — Qualify a Confidential AI Fleet"
+    description: "Qualify a multi-node confidential AI fleet across policy rollout, attestation freshness, revocation, dependency failure, admission limits, correlated evidence, and retained human authority."
+    category: guided_build
+    version: 0.1.0
+    status: draft
+  learning:
+    learning_level: "501"
+    learning_stage: Qualify
+    experience_type: system_qualification
+    prerequisites: [sovereign-ai-401]
+    recommended_next_items: []
+    journey_role: qualification_envelope
+    specialty_family: confidential_ai
+    branches_from: sovereign-ai-401
+    returns_to: null
+    shared_blueprint: red-hat-intel-sovereign-ai-v1
+    solution_family: sovereign_ai
+  sources:
+    showroom: {repo_url: "https://github.com/jkershawrh/sovereign-ai-501", revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff", playbook: site.yml, start_path: showroom}
+    workload: {repo_url: "https://github.com/jkershawrh/sovereign-ai-501", revision: "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff", deploy_path: charts/sovereign-ai-501}
+  runtime:
+    deployment_type: helm
+    deployment_class: shared_namespace
+    deployment_scope: participant_namespace
+    supported_architectures: [linux/amd64]
+    supported_openshift_versions: [review-required]
+    required_operators: [openshift-sandboxed-containers-review-required]
+    required_capabilities: [openshift, showroom, intel-xeon-tdx-review-required, trustee-review-required]
+    required_models: []
+    exposure_policy: internal
+    ingress: participant-presentation-route-and-same-namespace-qualifier
+    egress: none-in-rehearsal; live-verifier-and-kbs-policy-review-required
+    cluster_scoped_resources: false
+    cleanup_owner: launchpad-workshop-reclaim
+    workload:
+      helm_values_file: charts/sovereign-ai-501/values.published.yaml
+      helm_values:
+        workload_image: ghcr.io/jkershawrh/sovereign-ai-501-qualifier@sha256:cc3b3cfc19697b57d03347491523b6d72524fdb7890c591344ca714bbc4bca57
+        presentation_image: ghcr.io/jkershawrh/sovereign-ai-501-presentation@sha256:cd739547778feaaa5c0d86af26032a1b5962e95fe5447ec0b477730020daae64
+        source_state: REHEARSAL
+        confidential_runtime_enabled: false
+        live_tdx_claimed: false
+    resources:
+      steady_per_seat: {cpu_millicores: 50, memory_mib: 80, pods: 2, storage_gib: 0}
+      peak_per_seat: {cpu_millicores: 500, memory_mib: 256, pods: 2}
+      workshop_shared: {cpu_millicores: 0, memory_mib: 0, pods: 0, storage_gib: 0}
+      provisioning_concurrency: 1
+      observed_largest_run: 1
+      safety_margin_percent: 20
+      measurement_status: LOCAL_ARM_HOST_EMULATING_LINUX_AMD64_SINGLE_RUN_ONLY
+    tabs:
+      - {id: story, title: Story, source: presentation.route, path: /}
+      - {id: guide, title: Lab Guide, source: showroom.guide}
+      - {id: terminal, title: Terminal, source: showroom.terminal}
+      - {id: qualification, title: Fleet Evidence, source: workload.service, path: /api/v1/scenarios}
+      - {id: openshift-console, title: OpenShift Console, source: cluster.console_url}
+    readiness_checks: [presentation-health, qualifier-health, complete-rehearsal-conditions, false-live-refused, evidence-chain-verified, no-resource-release, no-model-execution]
+  certification_proposal:
+    stage: factory-development-verified
+    max_workshop_seats: 0
+    promotion_sequence: [1, 5, 25]
+    proof_contract_draft: handoff/catalog-certification.proposed.yaml
+    launchpad_evidence_required: [approved-tdx-fleet, live-confidential-guests, current-quote-appraisal, live-trustee-kbs, protected-resource-proof, model-execution-proof, trusted-render-review, destination-artifact-qualification, one-seat-live-certification, scale-certification, reclaim-zero-residue]
+  requested_pipeline_actions: [approve_source, run_discovery]
+  subsequent_independent_gates: [generate_draft, trusted_render_review, artifact_review, run_one_seat_certification, request_review, scale_certification, reclaim_zero_residue, promote]

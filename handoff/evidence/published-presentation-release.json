@@ -1,0 +1,15 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/artifact-release/v1",
+  "evidence_scope": "published_immutable_candidate",
+  "component": "presentation",
+  "source_repository": "https://github.com/jkershawrh/sovereign-ai-501",
+  "source_revision": "bc3583c7c9f3342f0c4eeb79637fe9223cf8ddff",
+  "image": "ghcr.io/jkershawrh/sovereign-ai-501-presentation@sha256:cd739547778feaaa5c0d86af26032a1b5962e95fe5447ec0b477730020daae64",
+  "architecture": "linux/amd64",
+  "workflow": {"run_id": 36500748653, "url": "https://github.com/jkershawrh/sovereign-ai-501/actions/runs/36500748653", "conclusion": "success"},
+  "scan": {"severity_counts": {"critical": 0, "high": 0, "medium": 4}, "hard_gate": "PASS: zero HIGH or CRITICAL", "report_sha256": "9e573589d3bd408bed7be62c333492c150590c2e3801766f54016d90f4f62a50"},
+  "sbom": {"format": "SPDX 2.3 JSON", "packages": 26, "sha256": "e34f488124384b9427ca80a30a9518b52540cc405db4b1c9bcb10ba182d556e0"},
+  "supply_chain": {"exact_digest_pull": "PASS", "oidc_signature_verification": "PASS", "spdx_attestation_verification": "PASS", "slsa_provenance_verification": "PASS"},
+  "retention_days": 90,
+  "certification": "NOT CLAIMED"
+}
