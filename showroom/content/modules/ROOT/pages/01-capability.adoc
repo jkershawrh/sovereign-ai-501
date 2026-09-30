@@ -1,5 +1,57 @@
 = 1. Establish the fleet baseline (10 minutes)
 
-Inspect the contract and create three node-scoped REHEARSAL evidence records. Confirm that every node names the same workload identity, policy bundle, reference-values version, freshness window, and correlation identifier.
+== Show
 
-Run the baseline. `QUALIFIED_REHEARSAL` means only that the deterministic control path is coherent. Record that live guests, quotes, resource release, and model execution all remain zero.
+The Flightpath seat contains a fleet qualifier and presentation. It simulates
+three Northstar sites—`tdx-a`, `tdx-b`, and `tdx-c`—without pretending that a
+confidential guest or hardware-rooted quote exists.
+
+== Learn
+
+Sovereign AI 401 operated one confidential-workload trust lifecycle. Sovereign
+AI 501 adds a fleet envelope: common workload identity, policy bundle,
+reference values, freshness window, dependency state, admission limit, and
+human promotion authority must remain correlated across every node.
+
+== Do
+
+Create the participant workspace and inspect the qualifier's declared source
+state and available conditions.
+
+[source,bash,role="execute"]
+----
+export FLEET_DIR="$HOME/sovereign-ai-501"
+export FLEET_URL="http://sovereign-ai-501-qualifier:8080"
+mkdir -p "$FLEET_DIR"
+curl -fsS "$FLEET_URL/healthz" | tee "$FLEET_DIR/health.json" | python3 -m json.tool
+curl -fsS "$FLEET_URL/api/v1/scenarios" | tee "$FLEET_DIR/scenarios.json" | python3 -m json.tool
+----
+
+Open the **OpenShift Console** tab. Under **Workloads → Deployments**, inspect
+`sovereign-ai-501-qualifier`; then inspect its Service and NetworkPolicies.
+These are namespace resources, not proof of a TDX-capable node or live Trustee.
+
+[source,bash,role="execute"]
+----
+oc get deploy sovereign-ai-501-qualifier -o custom-columns=NAME:.metadata.name,READY:.status.readyReplicas
+oc get service sovereign-ai-501-qualifier -o custom-columns=NAME:.metadata.name,PORT:.spec.ports[0].port
+oc get networkpolicy -o name | sort
+test "$(oc auth can-i get nodes)" = "no"
+----
+
+== Prove
+
+Require a healthy rehearsal and all eight named conditions before continuing.
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/health.json" "$FLEET_DIR/scenarios.json" <<'PY'
+import json, pathlib, sys
+health, available = [json.loads(pathlib.Path(p).read_text()) for p in sys.argv[1:]]
+expected = {"baseline","stale_quote","revoked_node","policy_skew","verifier_partition","kbs_partition","capacity_exceeded","false_live_claim"}
+assert health == {"status":"ok","sourceState":"REHEARSAL"}
+assert set(available["scenarios"]) == expected
+assert available["liveFleetObserved"] is False
+print("PASS: rehearsal qualifier ready; eight controlled conditions available")
+PY
+----

@@ -1,5 +1,43 @@
 = 2. Roll policy and reference values (10 minutes)
 
-Move two nodes to `fleet-policy-v2` while leaving one on `fleet-policy-v1`. The fleet must return `REFUSE_PROMOTION` and name the skewed node. Repeat for a reference-values mismatch.
+== Show
 
-Restore a coherent pair. Explain why policy and reference values are reviewed and rolled together, and why partial success cannot become fleet authority.
+Northstar can roll policy safely only if every site is evaluated against the
+same reviewed bundle and reference values. One lagging node blocks the fleet.
+
+== Learn
+
+Partial rollout success is not fleet authority. The receipt must identify the
+skewed node and the candidate remains unpromotable until evidence is coherent.
+
+== Do
+
+Run the coherent baseline and then introduce policy skew through the same API.
+
+[source,bash,role="execute"]
+----
+for scenario in baseline policy_skew; do
+  curl -fsS -X POST "$FLEET_URL/api/v1/qualify" -H 'Content-Type: application/json' \
+    -d "{\"scenario\":\"$scenario\"}" \
+    | tee "$FLEET_DIR/$scenario.json" | python3 -m json.tool
+done
+----
+
+== Prove
+
+Verify that the changed evidence—not model preference—changes the decision.
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR" <<'PY'
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+base = json.loads((root/"baseline.json").read_text())
+skew = json.loads((root/"policy_skew.json").read_text())
+assert base["decision"] == "QUALIFIED_REHEARSAL" and base["rollout"]["consistent"] is True
+assert skew["decision"] == "REFUSE_PROMOTION" and skew["rollout"]["consistent"] is False
+assert "tdx-b:POLICY_SKEW" in skew["reasonCodes"]
+assert base["observations"]["modelExecutions"] == skew["observations"]["modelExecutions"] == 0
+print("PASS: one skewed site blocks fleet promotion; zero model executions claimed")
+PY
+----

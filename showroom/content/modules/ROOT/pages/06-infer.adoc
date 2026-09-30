@@ -1,5 +1,35 @@
-= 6. Exercise admission limits (10 minutes)
+= 6. Exercise admission limits without inventing capacity (10 minutes)
 
-Request 18 concurrent rehearsal operations against a declared limit of 12. Confirm that 12 are admitted and 6 refused, with no silent overcommit.
+== Show
 
-These counts test deterministic admission logic only. They are not measured production capacity, throughput, latency, model concurrency, or a Launchpad seat claim.
+Northstar requests 18 concurrent rehearsal operations against a declared limit
+of 12. The qualifier must admit 12 and explicitly refuse 6.
+
+== Learn
+
+This condition tests deterministic admission behavior only. It is not measured
+throughput, latency, model concurrency, hardware capacity, or a Launchpad seat
+limit. The runtime reports zero model executions by design.
+
+== Do
+
+[source,bash,role="execute"]
+----
+curl -fsS -X POST "$FLEET_URL/api/v1/qualify" -H 'Content-Type: application/json' \
+  -d '{"scenario":"capacity_exceeded"}' \
+  | tee "$FLEET_DIR/capacity_exceeded.json" | python3 -m json.tool
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/capacity_exceeded.json" <<'PY'
+import json, pathlib, sys
+r=json.loads(pathlib.Path(sys.argv[1]).read_text())
+assert r["decision"] == "REFUSE_PROMOTION" and "CAPACITY_LIMIT_ENFORCED" in r["reasonCodes"]
+assert r["capacity"]["requested"] == 18 and r["capacity"]["admitted"] == 12 and r["capacity"]["refused"] == 6
+assert r["capacity"]["measuredLive"] is False and r["observations"]["modelExecutions"] == 0
+print("PASS: 12 admitted / 6 refused is labeled rehearsal logic, not measured capacity")
+PY
+----

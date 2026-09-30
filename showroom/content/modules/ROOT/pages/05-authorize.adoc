@@ -1,5 +1,40 @@
-= 5. Contain dependency failure (10 minutes)
+= 5. Contain verifier and KBS failure (10 minutes)
 
-Partition the verifier for one node, then the KBS boundary. Each affected path must fail closed. No cached appraisal, fallback secret, or successful peer may authorize the failed path.
+== Show
 
-Trace which runtime boundary produced the refusal and confirm that all other conditions remain visible in the accumulated evidence case.
+The verifier appraises evidence; the KBS policy boundary decides whether a
+protected resource may be released. Losing either dependency must stop the
+affected path rather than reusing cached success.
+
+== Learn
+
+This rehearsal does not run a live Trustee or release a protected resource.
+It tests that dependency loss remains visible, correlated, and fail closed.
+
+== Do
+
+[source,bash,role="execute"]
+----
+for scenario in verifier_partition kbs_partition; do
+  curl -fsS -X POST "$FLEET_URL/api/v1/qualify" -H 'Content-Type: application/json' \
+    -d "{\"scenario\":\"$scenario\"}" \
+    | tee "$FLEET_DIR/$scenario.json" | python3 -m json.tool
+done
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR" <<'PY'
+import json, pathlib, sys
+root=pathlib.Path(sys.argv[1])
+for name, reason in (("verifier_partition","tdx-a:VERIFIER_UNAVAILABLE"),("kbs_partition","tdx-a:KBS_UNAVAILABLE")):
+    result=json.loads((root/f"{name}.json").read_text())
+    assert result["decision"] == "REFUSE_PROMOTION"
+    assert reason in result["reasonCodes"]
+    assert result["dependencies"] == {"contained":False,"failClosed":True}
+    assert result["observations"]["protectedResourcesReleased"] == 0
+print("PASS: verifier and KBS loss both fail closed with no protected-resource release")
+PY
+----

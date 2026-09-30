@@ -1,7 +1,7 @@
 schema_version: demo-story.redhat-intel.com/story-brief/v1
-title: "One trusted node is not a qualified fleet"
+title: "Northstar Claims: one trusted node is not a qualified fleet"
 audience: "Security, platform, AI, and risk teams preparing a confidential AI fleet for independent certification."
-desired_outcome: "Show that version rollout, freshness, revocation, dependencies, concurrency, and evidence correlation are one human-controlled qualification envelope."
+desired_outcome: "Continue the Sovereign AI 401 journey by proving that Northstar Claims can qualify its claims-assistant fleet across rollout, freshness, revocation, dependencies, concurrency, and evidence correlation without transferring human authority."
 duration_minutes: 7
 presentation_scenes: 7
 lab_duration_minutes: 85

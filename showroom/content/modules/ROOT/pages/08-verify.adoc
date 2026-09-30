@@ -1,5 +1,47 @@
-= 8. Human review and zero residue (15 minutes)
+= 8. Human review and cleanup (15 minutes)
 
-Inspect the authority envelope: orderable, certified, promotion-eligible, provisioning, publishing, and Launchpad modification are all false; maximum workshop seats is zero. A named human may request independent intake, but the factory cannot approve it.
+== Show
 
-Remove the participant-scoped release and verify zero matching containers, pods, services, policies, temporary evidence, and credentials. Record cluster-owned shared services separately. Stop here—do not certify, promote, modify Launchpad, or copy AgnosticV.
+The fleet review package is participant-owned. The qualifier, presentation,
+Service, NetworkPolicies, Showroom, and namespace are Launchpad-owned. A learner
+must not delete shared platform resources to manufacture a zero-residue claim.
+
+== Learn
+
+Human review can request independent certification; it cannot turn rehearsal
+fixtures into current TDX evidence. Participant cleanup and Launchpad reclaim
+are separate proof boundaries.
+
+== Do
+
+Record the bounded human disposition, then remove only participant-owned files.
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/human-disposition.json" <<'PY'
+import json, pathlib, sys
+d={"owner":"northstar-fleet-review","decision":"request-independent-live-certification","mayPromote":False,
+   "blockers":["current Intel TDX quotes","live confidential guests","reviewed Trustee verifier and KBS","protected-resource release","model execution","measured capacity"]}
+pathlib.Path(sys.argv[1]).write_text(json.dumps(d,indent=2)+"\n")
+print(json.dumps(d,indent=2))
+PY
+rm -rf -- "$FLEET_DIR"
+----
+
+== Prove
+
+Require zero participant residue while the Launchpad-owned seat remains healthy
+for other workshop participants.
+
+[source,bash,role="execute"]
+----
+test ! -e "$HOME/sovereign-ai-501"
+test "$(oc get deploy sovereign-ai-501-qualifier -o jsonpath='{.status.readyReplicas}')" -ge 1
+curl -fsS "$FLEET_URL/healthz" | python3 -m json.tool
+echo "PASS: participant-owned residue is zero; Launchpad-owned lifecycle remains intact"
+----
+
+When the order is reclaimed, Launchpad must independently prove the namespace,
+Routes, RoleBindings, entitlements, and catalog resources reach zero. Until a
+live confidential fleet supplies current hardware-rooted evidence and all
+destination gates pass, stop here: do not certify, promote, or publish.

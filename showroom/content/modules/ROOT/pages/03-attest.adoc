@@ -1,5 +1,43 @@
-= 3. Enforce attestation freshness (10 minutes)
+= 3. Enforce freshness and reject false LIVE claims (10 minutes)
 
-Advance one node beyond the declared quote-age window. The next decision must refuse the fleet and preserve the exact age and node identity in the receipt.
+== Show
 
-Change a synthetic fixture to claim `LIVE` without supplying a hardware quote. Confirm `FALSE_LIVE_CLAIM`. State the missing direct observations required to lift this blocker.
+A quote can be structurally valid and still be too old. A label that says
+`LIVE` is also insufficient when no current hardware quote is attached.
+
+== Learn
+
+Freshness is evaluated for the next decision, not cached forever. This factory
+runtime deliberately downgrades unsupported `LIVE` input to `REHEARSAL` and
+adds `FALSE_LIVE_CLAIM`.
+
+== Do
+
+Exercise an expired node record and a false live claim.
+
+[source,bash,role="execute"]
+----
+for scenario in stale_quote false_live_claim; do
+  curl -fsS -X POST "$FLEET_URL/api/v1/qualify" -H 'Content-Type: application/json' \
+    -d "{\"scenario\":\"$scenario\"}" \
+    | tee "$FLEET_DIR/$scenario.json" | python3 -m json.tool
+done
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR" <<'PY'
+import json, pathlib, sys
+root=pathlib.Path(sys.argv[1])
+stale=json.loads((root/"stale_quote.json").read_text())
+false_live=json.loads((root/"false_live_claim.json").read_text())
+assert stale["decision"] == "REFUSE_PROMOTION" and "tdx-b:STALE_QUOTE" in stale["reasonCodes"]
+assert stale["attestation"]["allFresh"] is False
+assert false_live["sourceState"] == "REHEARSAL"
+assert "FALSE_LIVE_CLAIM" in false_live["reasonCodes"]
+assert false_live["observations"] == {"confidentialGuestsObserved":0,"currentTdxQuotesVerified":0,"protectedResourcesReleased":0,"modelExecutions":0}
+print("PASS: stale evidence and unsupported LIVE claims are refused")
+PY
+----

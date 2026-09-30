@@ -77,6 +77,13 @@ describe('SceneRenderer', () => {
     expect(scenes.length).toBeLessThanOrEqual(7)
   })
 
+  it('continues the Northstar Claims 401 story into a fleet-scale 501 decision', () => {
+    const serialized = JSON.stringify(demoConfig)
+    expect(serialized).toContain('Northstar Claims')
+    expect(serialized).toContain('Sovereign AI 401')
+    expect(serialized).toContain('claims-assistant fleet')
+  })
+
   it('includes the full progressive proof arc before the lab handoff', () => {
     expect(scenes.some((scene) => scene.type === 'guided-architecture')).toBe(true)
     expect(scenes.some((scene) => scene.type === 'live-journey')).toBe(true)

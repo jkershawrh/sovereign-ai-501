@@ -1,5 +1,46 @@
 = 4. Revoke a node (10 minutes)
 
-Mark one node measurement revoked, then submit a new qualification request. The next decision—not a future cache refresh—must return `REFUSE_PROMOTION` and identify the revoked node.
+== Show
 
-Record the policy version, reference-values version, condition, correlation identifier, and human actor who would own a real revocation change.
+Northstar withdraws `tdx-c` after a reference-value review. The next fleet
+decision must identify that site and refuse promotion immediately.
+
+== Learn
+
+Revocation is a new decision input, not a delayed documentation update. Healthy
+peers cannot convert a revoked node into acceptable evidence.
+
+== Do
+
+[source,bash,role="execute"]
+----
+curl -fsS -X POST "$FLEET_URL/api/v1/qualify" -H 'Content-Type: application/json' \
+  -d '{"scenario":"revoked_node"}' \
+  | tee "$FLEET_DIR/revoked_node.json" | python3 -m json.tool
+----
+
+Record the human-owned remediation boundary without changing the shared fixture.
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/revocation-review.json" <<'PY'
+import json, pathlib, sys
+review={"node":"tdx-c","action":"exclude pending independent re-appraisal","owner":"northstar-security-review","automated_promotion":False}
+pathlib.Path(sys.argv[1]).write_text(json.dumps(review,indent=2)+"\n")
+print(json.dumps(review,indent=2))
+PY
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/revoked_node.json" "$FLEET_DIR/revocation-review.json" <<'PY'
+import json, pathlib, sys
+result, review=[json.loads(pathlib.Path(p).read_text()) for p in sys.argv[1:]]
+assert result["decision"] == "REFUSE_PROMOTION"
+assert "tdx-c:REVOKED" in result["reasonCodes"] and result["attestation"]["revocationClear"] is False
+assert review["owner"] == "northstar-security-review" and review["automated_promotion"] is False
+print("PASS: revoked node is named and remediation remains human-owned")
+PY
+----

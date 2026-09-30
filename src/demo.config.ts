@@ -17,12 +17,12 @@ const technicalTopology = {
 }
 
 export const demoConfig: DemoConfig = {
-  id: 'sovereign-ai-501', title: 'Sovereign AI 501 — Qualify a Confidential AI Fleet', subtitle: 'Scale trust without scaling assumptions', event: 'Confidential AI qualification review', audience: 'Platform, security, AI, and risk teams', cta: 'Qualify the fleet envelope; keep promotion human.',
+  id: 'sovereign-ai-501', title: 'Sovereign AI 501 — Qualify a Confidential AI Fleet', subtitle: 'Scale trust without scaling assumptions', event: 'Northstar Claims fleet qualification review', audience: 'Platform, security, AI, and risk teams', cta: 'Qualify the claims-assistant fleet; keep promotion human.',
   brand: {primary: {name: 'Red Hat', logo: '/logos/redhat.svg', alt: 'Red Hat'}, partner: {name: 'Intel', logo: '/logos/intel.png', alt: 'Intel'}, attribution: 'Red Hat × Intel'},
   acts: [
     {id: 'stakes', label: '00', title: 'Fleet Risk', scenes: [
-      {id: 'intro', type: 'intro', beat: 'ordinary-world', title: 'One trusted node is not a qualified fleet', subtitle: 'Rollout, freshness, revocation, dependencies, and load can disagree', speakerPrompt: 'State REHEARSAL before any interpretation. No live TDX guest, quote, Trustee/KBS, protected resource, or model execution is observed.'},
-      {id: 'reframe', type: 'reframe', beat: 'stakes', eyebrow: 'The 501 shift', title: 'Qualify change, not one happy path', before: 'Node-by-node pass', after: 'Fleet-wide evidence envelope', detail: 'Every condition must stay correlated, fail closed, and stop at human review.', speakerPrompt: 'Explain why 401 operation is the foundation and why 501 adds fleet-wide qualification.'},
+      {id: 'intro', type: 'intro', beat: 'ordinary-world', title: 'One trusted node is not a qualified fleet', subtitle: 'Northstar Claims must expand its confidential claims assistant across three sites', speakerPrompt: 'State REHEARSAL before any interpretation. No live TDX guest, quote, Trustee/KBS, protected resource, or model execution is observed.'},
+      {id: 'reframe', type: 'reframe', beat: 'stakes', eyebrow: 'The 501 shift', title: 'Qualify change, not one happy path', before: 'Sovereign AI 401 · one workload', after: 'Claims-assistant fleet · one evidence envelope', detail: 'Every condition must stay correlated, fail closed, and stop at human review.', speakerPrompt: 'Explain why Sovereign AI 401 operation is the foundation and why 501 adds fleet-wide qualification.'},
     ]},
     {id: 'architecture', label: '01', title: 'Causal Architecture', scenes: [
       {id: 'guided-architecture', type: 'guided-architecture', beat: 'system-reveal', eyebrow: 'Qualification envelope', title: 'Five questions earn one candidate receipt', body: 'Reveal only the boundary that answers the current question.', layers: [

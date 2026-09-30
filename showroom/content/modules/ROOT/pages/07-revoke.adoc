@@ -1,5 +1,53 @@
-= 7. Correlate the evidence (10 minutes)
+= 7. Correlate and export the evidence (10 minutes)
 
-Verify that baseline, rollout, freshness, revocation, dependency, and admission records share the intended correlation chain. Recompute the receipt digest and confirm that changing any condition changes the receipt.
+== Show
 
-Export the bounded candidate receipt without credentials, raw quotes, Kubeconfigs, secrets, or unredacted runtime data.
+The value of the exercise is not eight unrelated JSON files. Node, condition,
+policy, capacity, and authority must be attributable through a common
+correlation identity while each changed condition produces its own receipt.
+
+== Learn
+
+The receipt is deterministic evidence of the evaluated fixture. It contains no
+raw TDX quote, Kubeconfig, Secret, credential, prompt, or model response and it
+does not authorize promotion.
+
+== Do
+
+Build a bounded review package from the completed conditions.
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR" <<'PY'
+import json, pathlib, sys
+root=pathlib.Path(sys.argv[1])
+names=["baseline","policy_skew","stale_quote","false_live_claim","revoked_node","verifier_partition","kbs_partition","capacity_exceeded"]
+results={name:json.loads((root/f"{name}.json").read_text()) for name in names}
+package={
+  "schemaVersion":"northstar.example/sovereign-ai-501-review/v1",
+  "sourceState":"REHEARSAL",
+  "correlationIds":sorted({r["correlationId"] for r in results.values()}),
+  "conditions":{name:{"decision":r["decision"],"reasonCodes":r["reasonCodes"],"receipt":r["evidence"]["receipt"]} for name,r in results.items()},
+  "observations":results["baseline"]["observations"],
+  "authority":results["baseline"]["authority"]
+}
+(root/"fleet-review-package.json").write_text(json.dumps(package,indent=2)+"\n")
+print(json.dumps(package,indent=2))
+PY
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+python3 - "$FLEET_DIR/fleet-review-package.json" <<'PY'
+import json, pathlib, re, sys
+p=json.loads(pathlib.Path(sys.argv[1]).read_text())
+assert p["sourceState"] == "REHEARSAL" and len(p["correlationIds"]) == 1
+assert len(p["conditions"]) == 8 and len({v["receipt"] for v in p["conditions"].values()}) == 8
+assert p["observations"] == {"confidentialGuestsObserved":0,"currentTdxQuotesVerified":0,"protectedResourcesReleased":0,"modelExecutions":0}
+assert p["authority"]["mayPromote"] is False and p["authority"]["llmAuthority"] == "NONE"
+assert not re.search(r"password|token|secret|kubeconfig|rawQuote", pathlib.Path(sys.argv[1]).read_text(), re.I)
+print("PASS: eight conditions share one correlation identity, retain distinct receipts, and grant no authority")
+PY
+----

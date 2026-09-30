@@ -1,7 +1,32 @@
-= Qualify a confidential AI fleet
+= The Fleet That Had to Refuse
 
-This separate 75–90 minute Showroom lab extends the 401 trust lifecycle to a fleet-wide qualification envelope. All supplied results are **REHEARSAL**. The lab does not observe a confidential guest, current Intel TDX quote, Trustee verifier/KBS, protected-resource release, or model execution.
+== The customer story
 
-You will build and test: BASELINE → ROLLOUT → FRESHNESS → REVOCATION → PARTITION → CAPACITY → CORRELATION → HUMAN REVIEW.
+Northstar Claims has completed Sovereign AI 401 for one confidential
+claims-assistant workload. The next business request is to expand that service
+across three sites without turning one trusted node into an unsupported fleet
+claim. A policy rollout, stale quote, revoked node, verifier outage, or capacity
+spike must change the fleet decision immediately and visibly.
 
-The exit artifact is a reviewable candidate receipt. It grants no catalog, provisioning, certification, ordering, promotion, or publication authority.
+In this 75–90 minute Sovereign AI 501 lab, you act as the qualification lead.
+You will run the same fleet contract through baseline, rollout, freshness,
+revocation, dependency, admission, correlation, and human-review conditions.
+
+== Customer outcome
+
+You leave with a bounded fleet qualification package that explains:
+
+* which three node records were evaluated under one correlation identity;
+* why unsafe or inconsistent evidence produced `REFUSE_PROMOTION`;
+* why 12 admitted and 6 refused operations are a rehearsal fixture, not capacity data;
+* why zero confidential guests, TDX quotes, protected resources, and model executions
+  prevents a live confidential-AI claim; and
+* which participant artifacts were removed versus which Launchpad-owned resources
+  remain until platform reclaim.
+
+All supplied evidence is **REHEARSAL**. This lab does not observe a confidential
+guest, current Intel TDX quote, Trustee verifier/KBS, protected-resource release,
+or model execution. The exit artifact requests human review; it grants no
+catalog, certification, ordering, promotion, or publication authority.
+
+Begin with xref:01-capability.adoc[the fleet baseline].
