@@ -7,6 +7,7 @@ const mustExist = [
   'contracts/fleet-policy.v1.json',
   'contracts/fleet-failure-matrix.v1.json',
   'showroom/default-site.yml',
+  'nginx-main.conf',
   'charts/sovereign-ai-501/Chart.yaml',
   'charts/sovereign-ai-501/values.schema.json',
   '.github/workflows/release.yml',
@@ -49,4 +50,18 @@ test('presentation exposes explicit health and readiness endpoints', async () =>
   assert.match(config, /location = \/healthz/)
   assert.match(config, /location = \/readyz/)
   assert.match(containerfile, /\/etc\/nginx\/conf\.d\/nginx\.default\.conf/)
+  assert.match(containerfile, /COPY nginx-main\.conf/)
+})
+
+test('presentation and qualifier use seat-safe routes and bounded nginx runtime', async () => {
+  const route = await readFile('charts/sovereign-ai-501/templates/route.yaml', 'utf8')
+  const presentation = await readFile('charts/sovereign-ai-501/templates/presentation.yaml', 'utf8')
+  const main = await readFile('nginx-main.conf', 'utf8')
+  const policy = await readFile('charts/sovereign-ai-501/templates/networkpolicy.yaml', 'utf8')
+  assert.match(route, /name: story/)
+  assert.match(route, /name: fleet/)
+  assert.match(presentation, /mountPath: \/run/)
+  assert.match(main, /worker_processes 1;/)
+  assert.match(main, /pid \/run\/nginx\.pid;/)
+  assert.match(policy, /network\.openshift\.io\/policy-group: ingress/)
 })

@@ -8,6 +8,13 @@ const stages = [
   '05-authorize.adoc', '06-infer.adoc', '07-revoke.adoc', '08-verify.adoc',
 ]
 
+test('Showroom playbook selects the pinned sovereign content tree', async () => {
+  const playbook = await readFile('showroom/default-site.yml', 'utf8')
+  assert.match(playbook, /start_page: sovereign-ai-501::index\.adoc/)
+  assert.match(playbook, /url: \/showroom\/repo/)
+  assert.match(playbook, /start_path: showroom\/content/)
+})
+
 test('the 501 journey continues the Northstar 401 story and names its fleet outcome', async () => {
   const index = await readFile(`${pagesRoot}/index.adoc`, 'utf8')
   assert.match(index, /Northstar Claims/i)
